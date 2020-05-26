@@ -1,7 +1,4 @@
 numpy
-scipy
 scikit-learn
 pandas
-openml
-statsmodels
 inspyred

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 #
-# Copyright 2019 Pietro Barbiero and Giovanni Squillero
+# Copyright 2019 Pietro Barbiero, Giovanni Squillero and Alberto Tonda
 #
 # Licensed under the Apache License, Version 2.0 (the "License"); you may not
 # use this file except in compliance with the License.
@@ -14,24 +14,65 @@
 #
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import codecs
+import os
 
-from setuptools import setup, find_packages
-from os import path
+from setuptools import find_packages, setup
 
-this_directory = path.abspath(path.dirname(__file__))
-with open(path.join(this_directory, 'README.rst'), encoding='utf-8') as f:
-    long_description = f.read()
+# get __version__ from _version.py
+ver_file = os.path.join('evofs', '_version.py')
+with open(ver_file) as f:
+    exec(f.read())
 
-setup(
-    name='evofs',
-    version='0.0.0',
-    description='Multi-objective evolutionary feature selection.',
-    long_description=long_description,
-    long_description_content_type="text/x-rst",
-    url='https://github.com/pietrobarbiero/moea-feature-selection/',
-    author='Pietro Barbiero, Giovanni Squillero and Alberto Tonda',
-    author_email='barbiero@tutanota.com',
-    license="Apache 2.0",
-    packages=find_packages(exclude=('tests', 'docs')),
-    include_package_data=True,
-)
+DISTNAME = 'evofs'
+DESCRIPTION = 'Multi-objective evolutionary feature selection.'
+with codecs.open('README.rst', encoding='utf-8-sig') as f:
+    LONG_DESCRIPTION = f.read()
+MAINTAINER = 'P. Barbiero'
+MAINTAINER_EMAIL = 'barbiero@tutanota.com'
+URL = 'https://github.com/pietrobarbiero/moea-feature-selection'
+LICENSE = 'Apache 2.0'
+DOWNLOAD_URL = 'https://github.com/pietrobarbiero/moea-feature-selection.git'
+VERSION = __version__
+INSTALL_REQUIRES = ['numpy', 'pandas', 'inspyred', 'scikit-learn']
+CLASSIFIERS = ['Intended Audience :: Science/Research',
+               'Intended Audience :: Developers',
+               'License :: OSI Approved',
+               'Programming Language :: Python',
+               'Topic :: Software Development',
+               'Topic :: Scientific/Engineering',
+               'Operating System :: Microsoft :: Windows',
+               'Operating System :: POSIX',
+               'Operating System :: Unix',
+               'Operating System :: MacOS',
+               'Programming Language :: Python :: 2.7',
+               'Programming Language :: Python :: 3.5',
+               'Programming Language :: Python :: 3.6',
+               'Programming Language :: Python :: 3.7']
+EXTRAS_REQUIRE = {
+    'tests': [
+        'pytest',
+        'pytest-cov'],
+    'docs': [
+        'sphinx',
+        'sphinx-gallery',
+        'sphinx_rtd_theme',
+        'numpydoc',
+        'matplotlib'
+    ]
+}
+
+setup(name=DISTNAME,
+      maintainer=MAINTAINER,
+      maintainer_email=MAINTAINER_EMAIL,
+      description=DESCRIPTION,
+      license=LICENSE,
+      url=URL,
+      version=VERSION,
+      download_url=DOWNLOAD_URL,
+      long_description=LONG_DESCRIPTION,
+      zip_safe=False,  # the package can run out of an .egg file
+      classifiers=CLASSIFIERS,
+      packages=find_packages(),
+      install_requires=INSTALL_REQUIRES,
+      extras_require=EXTRAS_REQUIRE)
