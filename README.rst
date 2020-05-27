@@ -9,24 +9,20 @@ EvoFS: Multi-objective evolutionary feature selection
 
 
 
-.. |Build| image:: https://img.shields.io/travis/pietrobarbiero/dbgen?label=Master%20Build&style=for-the-badge
+.. |Build| image:: https://img.shields.io/travis/pietrobarbiero/evofs?label=Master%20Build&style=for-the-badge
     :alt: Travis (.org)
-    :target: https://travis-ci.org/pietrobarbiero/dbgen
+    :target: https://travis-ci.org/pietrobarbiero/evofs
 
-.. |Coverage| image:: https://img.shields.io/codecov/c/gh/pietrobarbiero/dbgen?label=Test%20Coverage&style=for-the-badge
+.. |Coverage| image:: https://img.shields.io/codecov/c/gh/pietrobarbiero/evofs?label=Test%20Coverage&style=for-the-badge
     :alt: Codecov
-    :target: https://codecov.io/gh/pietrobarbiero/dbgen
+    :target: https://codecov.io/gh/pietrobarbiero/evofs
 
-.. |Docs| image:: https://img.shields.io/readthedocs/pietrobarbiero/dbgen?style=for-the-badge
-    :alt: Read the Docs (version)
-    :target: https://dbgen.readthedocs.io/en/latest/
+.. |PyPI license| image:: https://img.shields.io/pypi/l/evofs.svg?style=for-the-badge
+   :target: https://pypi.python.org/pypi/evofs/
 
-.. |PyPI license| image:: https://img.shields.io/pypi/l/dbgen.svg?style=for-the-badge
-   :target: https://pypi.python.org/pypi/dbgen/
-
-.. |PyPI-version| image:: https://img.shields.io/pypi/v/dbgen?style=for-the-badge
+.. |PyPI-version| image:: https://img.shields.io/pypi/v/evofs?style=for-the-badge
     :alt: PyPI
-    :target: https://pypi.python.org/pypi/dbgen/
+    :target: https://pypi.python.org/pypi/evofs/
 
 EvoFS is a python package providing a sklearn-like transformer
 for multi-objective evolutionary feature selection.
