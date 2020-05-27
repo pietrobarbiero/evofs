@@ -35,7 +35,7 @@ You can install EvoFS along with all its dependencies from
 
 .. code:: bash
 
-    $ pip install -r requirements.txt evofs
+    $ pip install evofs
 
 Source
 ------
