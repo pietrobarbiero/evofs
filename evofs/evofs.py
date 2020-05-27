@@ -39,12 +39,14 @@ class EvoFS(BaseEstimator, TransformerMixin):
     """
 
     def __init__(self, estimator, pop_size: int = 100, max_generations: int = 100, max_features: int = 100,
-                 n_splits: int = 3, random_state: int = 42, scoring: str = "f1_weighted", verbose: bool = True):
+                 min_features: int = 10, n_splits: int = 3, random_state: int = 42,
+                 scoring: str = "f1_weighted", verbose: bool = True):
 
         self.estimator = estimator
         self.pop_size = pop_size
         self.max_generations = max_generations
         self.max_features = max_features
+        self.min_features = min_features
         self.n_splits = n_splits
         self.random_state = random_state
         self.scoring = scoring
@@ -57,7 +59,7 @@ class EvoFS(BaseEstimator, TransformerMixin):
         k = int(X.shape[1])
 
         self.max_generations_ = np.min([self.max_generations, int(math.log10(2**int(0.5 * k)))])
-        self.pop_size_ = np.max([self.pop_size, int(math.log10(2**k))])
+        self.pop_size_ = np.min([self.pop_size, int(math.log10(2**k))])
         self.offspring_size_ = 2 * self.pop_size_
         self.maximize_ = True
         self.individuals_ = []
@@ -70,9 +72,6 @@ class EvoFS(BaseEstimator, TransformerMixin):
 
         self.x_train_, x_val = X.iloc[train_index], X.iloc[val_index]
         self.y_train_, y_val = y[train_index], y[val_index]
-
-        self.n_classes_ = len(np.unique(self.y_train_))
-        self.min_features = 2
 
         # initialize pseudo-random number generation
         prng = random.Random()
@@ -155,10 +154,6 @@ class EvoFS(BaseEstimator, TransformerMixin):
             child2 = children[1][cut_point2:] + children[0][:cut_point1]
 
             # remove duplicates
-            # indexes = np.unique(child1, return_index=True)[1]
-            # child1 = [child1[index] for index in sorted(indexes)]
-            # indexes = np.unique(child2, return_index=True)[1]
-            # child2 = [child2[index] for index in sorted(indexes)]
             child1 = np.unique(child1).tolist()
             child2 = np.unique(child2).tolist()
             children = [child1, child2]
