@@ -18,13 +18,17 @@ import math
 import random
 import copy
 import traceback
+from typing import Union, List
 
 import inspyred
 import datetime
 import numpy as np
 import multiprocessing
+
+from scipy import stats
 from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.feature_selection import SelectKBest, f_classif
 from sklearn.metrics import get_scorer
 from sklearn.model_selection import StratifiedKFold, cross_validate
 import warnings
@@ -40,7 +44,8 @@ class EvoFS(BaseEstimator, TransformerMixin):
 
     def __init__(self, estimator, pop_size: int = 100, max_generations: int = 100, max_features: int = 100,
                  min_features: int = 10, n_splits: int = 3, random_state: int = 42,
-                 scoring: str = "f1_weighted", verbose: bool = True):
+                 scoring: str = "f1_weighted", verbose: bool = True,
+                 ranking: Union[List, np.array] = None, score_func: callable = f_classif):
 
         self.estimator = estimator
         self.pop_size = pop_size
@@ -51,6 +56,8 @@ class EvoFS(BaseEstimator, TransformerMixin):
         self.random_state = random_state
         self.scoring = scoring
         self.verbose = verbose
+        self.ranking = ranking
+        self.score_func = score_func
 
     def fit(self, X, y=None, **fit_params):
         if not isinstance(X, pd.DataFrame):
@@ -72,6 +79,12 @@ class EvoFS(BaseEstimator, TransformerMixin):
 
         self.x_train_, x_val = X.iloc[train_index], X.iloc[val_index]
         self.y_train_, y_val = y[train_index], y[val_index]
+
+        # rank features
+        if not self.ranking:
+            fs = SelectKBest(self.score_func, k=1)
+            fs.fit(self.x_train_, self.y_train_)
+            self.scores_ = np.nan_to_num(fs.scores_, nan=0)
 
         # initialize pseudo-random number generation
         prng = random.Random()
@@ -206,11 +219,15 @@ class EvoFS(BaseEstimator, TransformerMixin):
             # compute numer of unused features
             features_removed = self.x_train_.shape[1] - len(c)
 
+            # the best feature sets should contain features which are useful individually
+            test_median = np.median(self.scores_[c])
+
             # maximizing the points removed also means
             # minimizing the number of points taken (LOL)
             fitness.append(inspyred.ec.emo.Pareto([
                     features_removed,
                     cv_scores,
+                    test_median,
             ]))
 
         return fitness
@@ -228,10 +245,10 @@ class EvoFS(BaseEstimator, TransformerMixin):
         # so here is some fancy formatting
         delta_time_string = str(delta_time)[:-7] + "s"
 
-        log = "[%s] Generation %d, Random individual: size=%d, score=%.2f" \
-            % (delta_time_string, num_generations,
-               feature_size - population[0].fitness[0],
-               population[0].fitness[1])
+        log = f"[{delta_time_string}] Generation {num_generations}, " \
+              f"Random individual: size={feature_size - population[0].fitness[0]}, " \
+              f"cv_score={population[0].fitness[1]:.2f}, " \
+              f"test={population[0].fitness[2]:.2f}"
         if self.verbose:
             print(log)
         #     logger.info(log)

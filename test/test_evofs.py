@@ -11,7 +11,6 @@ class TestEvoCore(unittest.TestCase):
 
         from evofs import EvoFS
 
-
         X, y = load_digits(return_X_y=True)
 
         model = EvoFS(RidgeClassifier(random_state=42))
@@ -23,6 +22,7 @@ class TestEvoCore(unittest.TestCase):
 
         print(score1)
         print(score2)
+        print(len(model.best_set_))
 
         return
 
