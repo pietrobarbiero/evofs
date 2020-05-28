@@ -45,7 +45,7 @@ class EvoFS(BaseEstimator, TransformerMixin):
     def __init__(self, estimator, pop_size: int = 100, max_generations: int = 100, max_features: int = 100,
                  min_features: int = 10, n_splits: int = 3, random_state: int = 42,
                  scoring: str = "f1_weighted", verbose: bool = True,
-                 ranking: Union[List, np.array] = None, score_func: callable = f_classif):
+                 scores: Union[List, np.array] = None, score_func: callable = f_classif):
 
         self.estimator = estimator
         self.pop_size = pop_size
@@ -56,7 +56,7 @@ class EvoFS(BaseEstimator, TransformerMixin):
         self.random_state = random_state
         self.scoring = scoring
         self.verbose = verbose
-        self.ranking = ranking
+        self.scores = scores
         self.score_func = score_func
 
     def fit(self, X, y=None, **fit_params):
@@ -81,10 +81,12 @@ class EvoFS(BaseEstimator, TransformerMixin):
         self.y_train_, y_val = y[train_index], y[val_index]
 
         # rank features
-        if not self.ranking:
+        if self.scores is None:
             fs = SelectKBest(self.score_func, k=1)
             fs.fit(self.x_train_, self.y_train_)
             self.scores_ = np.nan_to_num(fs.scores_, nan=0)
+        else:
+            self.scores_ = self.scores
 
         # initialize pseudo-random number generation
         prng = random.Random()
