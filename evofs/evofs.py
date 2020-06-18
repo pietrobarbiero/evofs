@@ -115,6 +115,8 @@ class EvoFS(BaseEstimator, TransformerMixin):
             current_time=datetime.datetime.now()
         )
 
+        self.solutions_ = ea.archive
+
         # find best individual, the one with the highest accuracy on the validation set
         accuracy_best = 0
         feature_counts = np.zeros(X.shape[1])
