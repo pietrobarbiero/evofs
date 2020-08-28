@@ -115,10 +115,9 @@ class EvoFS(BaseEstimator, TransformerMixin):
             current_time=datetime.datetime.now()
         )
 
-        self.solutions_ = ea.archive
-
         # find best individual, the one with the highest accuracy on the validation set
         accuracy_best = 0
+        self.solutions_ = []
         feature_counts = np.zeros(X.shape[1])
         for individual in ea.archive:
 
@@ -136,6 +135,9 @@ class EvoFS(BaseEstimator, TransformerMixin):
             if accuracy_best < accuracy_val:
                 self.best_set_ = feature_set
                 accuracy_best = accuracy_val
+
+            individual.validation_score_ = accuracy_val
+            self.solutions_.append(individual)
 
         self.feature_ranking_ = np.argsort(feature_counts)
         return self
