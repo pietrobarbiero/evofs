@@ -37,6 +37,21 @@ You can install EvoFS along with all its dependencies from
 
     $ pip install evofs
 
+
+Citing
+----------
+
+If you find EovFS useful in your research, please consider citing the following paper::
+
+    @inproceedings{barbiero2019novel,
+      title={A Novel Outlook on Feature Selection as a Multi-objective Problem},
+      author={Barbiero, Pietro and Lutton, Evelyne and Squillero, Giovanni and Tonda, Alberto},
+      booktitle={International Conference on Artificial Evolution (Evolution Artificielle)},
+      pages={68--81},
+      year={2019},
+      organization={Springer}
+    }
+
 Source
 ------
 
