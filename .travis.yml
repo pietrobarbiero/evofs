@@ -8,6 +8,7 @@ matrix:
   include:
     - env: PYTHON_VERSION="3.7" NUMPY_VERSION="*" SCIPY_VERSION="*" PANDAS_VERSION="*" PYTORCH_VERSION="*" SYMPY_VERSION="*"
 
+
 install:
   - pip install -r requirements.txt .
 
